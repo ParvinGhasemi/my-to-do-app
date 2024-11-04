@@ -1,4 +1,6 @@
 from typing import Annotated
+
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from fastapi import FastAPI, Depends, HTTPException, Path
@@ -13,6 +15,13 @@ from database import engine, SessionLocal
 app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
+
+
+class TodosRequest(BaseModel):
+    title: str = Field(min_length=3)
+    description: str = Field(min_length=3, max_length=100)
+    priority: int = Field(gt=0, lt=6)
+    complete: bool
 
 
 def get_db():
@@ -37,3 +46,9 @@ async def read_todo(db: db_dependency, todo_id: int = Path(gt=0)):
         return todo_model
     raise HTTPException(status_code=404, detail="To-do not found.")
 
+
+@app.post("/todo", status_code=status.HTTP_201_CREATED)
+async def create_new_todo(db: db_dependency, todo_request: TodosRequest):
+    todo_model = Todos(**todo_request.dict())
+    db.add(todo_model)
+    db.commit()
