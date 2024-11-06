@@ -31,8 +31,10 @@ db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)] 
 
 @router.get("/", status_code=status.HTTP_200_OK)
-async def read_all(db: db_dependency):
-    return db.query(Todos).all()
+async def read_all(user: user_dependency, db: db_dependency):
+    if user is None:
+        raise HTTPException(status_code=401, detail="Not authorized.")
+    return db.query(Todos).filter(user.get('id') == Todos.owner_id).all()
 
 
 @router.get("/todos/{todo_id}", status_code=status.HTTP_200_OK)
