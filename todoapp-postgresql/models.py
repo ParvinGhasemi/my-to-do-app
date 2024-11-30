@@ -1,25 +1,6 @@
 from database import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 
-"""
-{
-  "username": "parvin",
-  "email": "parvin@email.com",
-  "first_name": "parvin",
-  "last_name": "parvin",
-  "password": "test1234",
-  "role": "admin"
-},
-{
-  "username": "example1",
-  "email": "example@email.com",
-  "first_name": "example",
-  "last_name": "user",
-  "password": "test1234",
-  "role": ""
-}
-"""
-
 class Users(Base):
     __tablename__ = 'users'
 
