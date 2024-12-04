@@ -80,3 +80,22 @@ def test_create_todo(test_todo):
     assert model.description == request_data.get('description')
     assert model.priority == request_data.get('priority')
     assert model.complete == request_data.get('complete')
+    
+    
+def test_update_todo(test_todo):
+    request_data = {
+        'title': 'Updated Todo',
+        'description': 'Updated Todo Description',
+        'priority': 4,
+        'complete': True,
+    }
+    
+    response = client.put('/todos/1', json=request_data)
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    
+    db = TestingSessionLocal()
+    model = db.query(Todos).filter(Todos.id == 1).first()
+    assert model.title == request_data.get('title')
+    assert model.description == request_data.get('description')
+    assert model.priority == request_data.get('priority')
+    assert model.complete == request_data.get('complete')
