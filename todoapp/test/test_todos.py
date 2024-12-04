@@ -55,3 +55,9 @@ def test_read_one_authenticated(test_todo):
     response = client.get('/todos/1')
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'id': 1, 'priority': 5, 'owner_id': 1, 'title': 'Test Todo', 'description': 'Test Todo Description', 'complete': False}
+
+
+def test_read_one_authenticated_not_found(test_todo):
+    response = client.get('/todos/999')
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {'detail': 'To-do not found.'}
