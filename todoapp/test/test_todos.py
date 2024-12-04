@@ -59,5 +59,24 @@ def test_read_one_authenticated(test_todo):
 
 def test_read_one_authenticated_not_found(test_todo):
     response = client.get('/todos/999')
-    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.status_code == status.HTTP_404_NOT_FOUND    # or simplu: == 404
     assert response.json() == {'detail': 'To-do not found.'}
+    
+    
+# test create new todo
+def test_create_todo(test_todo):
+    request_data = {
+        'title': 'New Todo',
+        'description': 'New Todo Description',
+        'priority': 5,
+        'complete': False
+    }
+    response = client.post('/todos', json=request_data)
+    assert response.status_code == status.HTTP_201_CREATED
+    
+    db = TestingSessionLocal()
+    model = db.query(Todos).filter(Todos.id == 2).first()
+    assert model.title == request_data['title'] # or == request_data.get('title')
+    assert model.description == request_data.get('description')
+    assert model.priority == request_data.get('priority')
+    assert model.complete == request_data.get('complete')
