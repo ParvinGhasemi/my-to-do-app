@@ -99,3 +99,17 @@ def test_update_todo(test_todo):
     assert model.description == request_data.get('description')
     assert model.priority == request_data.get('priority')
     assert model.complete == request_data.get('complete')
+    
+
+def test_update_todo_not_found(test_todo):
+    request_data = {
+        'title': 'Updated Todo',
+        'description': 'Updated Todo Description',
+        'priority': 4,
+        'complete': True,
+    }
+    
+    response = client.put('/todos/999', json=request_data)
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {'detail': 'To-do not found.'}
+    
