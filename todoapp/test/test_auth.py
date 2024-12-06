@@ -3,6 +3,8 @@ from ..routers.auth import get_db, authenticate_user, create_access_token, SECRE
 from datetime import timedelta
 from jose import jwt
 import pytest   # to test async functions with pytest-asyncio: so the test is not skipped
+from fastapi import HTTPException
+
 
 app.dependency_overrides[get_db] = override_get_db
 
@@ -41,3 +43,15 @@ async def test_get_current_user():
     
     user = await get_current_user(token=token)
     assert user == {'username': 'testuser', 'id': 1, 'user_role': 'admin'}
+    
+    
+@pytest.mark.asyncio
+async def test_get_current_user_missing_payload():
+    to_encode = {'role': 'user'}
+    token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    
+    with pytest.raises(HTTPException) as exc_info:
+        await get_current_user(token=token)
+    
+    assert exc_info.value.status_code == 401
+    assert exc_info.value.detail == 'Could not validate user.'
