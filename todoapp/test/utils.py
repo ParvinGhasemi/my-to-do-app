@@ -43,13 +43,13 @@ def test_todo():
 
 @pytest.fixture
 def test_user():
-    user = Users(username='paptest',
-                 email='paptest@email.com',
-                 first_name='paptest',
-                 last_name='paptest',
-                 hashed_password='testpassword',
-                 role='admin',
-                 phone_number='1234567890')
+    user = Users(username = 'paptest',
+                 email = 'paptest@email.com',
+                 first_name = 'paptest',
+                 last_name = 'paptest',
+                 hashed_password = bcrypt_context.hash('testpassword'),
+                 role = 'admin',
+                 phone_number = '1234567890')
     db = TestingSessionLocal()
     db.add(user)
     db.commit()
