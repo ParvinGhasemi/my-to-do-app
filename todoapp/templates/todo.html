@@ -9,7 +9,7 @@
                 List of your Todo's
             </h5>
             <p class="card-text">
-                Information regarding your todo list
+                Information regarding your todo list.
             </p>
 
             <table class="table table-hover">
@@ -27,7 +27,7 @@
                         <td>{{loop.index}}</td>
                         <td>{{todo.title}}</td>
                         <td>
-                            <button onclick="window.location.href='edit-todo-page'" type="button" class="btn btn-info">
+                            <button onclick="window.location.href='edit-todo-page/{{todo.id}}'" type="button" class="btn btn-info">
                                 Edit
                             </button>
                         </td>
@@ -37,7 +37,7 @@
                         <td>{{loop.index}}</td>
                         <td class="strike-through-td">{{todo.title}}</td>
                         <td>
-                            <button onclick="window.location.href='edit-todo-page'" type="button" class="btn btn-info">
+                            <button onclick="window.location.href='edit-todo-page/{{todo.id}}'" type="button" class="btn btn-info">
                                 Edit
                             </button>
                         </td>
